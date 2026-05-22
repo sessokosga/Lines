@@ -23,7 +23,7 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 41
+      "__id__": 45
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 42
+      "__id__": 46
     },
     "_id": "2b39aa2d-b881-4f21-9f50-ae952dc9be28"
   },
@@ -83,13 +83,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 38
+        "__id__": 42
       },
       {
-        "__id__": 39
+        "__id__": 43
       },
       {
-        "__id__": 40
+        "__id__": 44
       }
     ],
     "_prefab": null,
@@ -337,7 +337,7 @@
         "__id__": 9
       },
       {
-        "__id__": 37
+        "__id__": 41
       }
     ],
     "_prefab": null,
@@ -387,6 +387,21 @@
     "gameUI": {
       "__id__": 10
     },
+    "layouts": [
+      {
+        "__id__": 37
+      },
+      {
+        "__id__": 38
+      },
+      {
+        "__id__": 39
+      },
+      {
+        "__id__": 40
+      }
+    ],
+    "defaultCellSize": 100,
     "_id": "3a/2XKRPVGHL8mMpZwEVVI"
   },
   {
@@ -1520,6 +1535,26 @@
     "_id": "79nsZ/S8dNjryrQCHZYQp2"
   },
   {
+    "__type__": "GridLayout",
+    "gridSize": 4,
+    "cellSize": 110
+  },
+  {
+    "__type__": "GridLayout",
+    "gridSize": 5,
+    "cellSize": 110
+  },
+  {
+    "__type__": "GridLayout",
+    "gridSize": 6,
+    "cellSize": 100
+  },
+  {
+    "__type__": "GridLayout",
+    "gridSize": 7,
+    "cellSize": 90
+  },
+  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -1620,28 +1655,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 43
-    },
-    "shadows": {
-      "__id__": 44
-    },
-    "_skybox": {
-      "__id__": 45
-    },
-    "fog": {
-      "__id__": 46
-    },
-    "octree": {
       "__id__": 47
     },
-    "skin": {
+    "shadows": {
       "__id__": 48
     },
-    "lightProbeInfo": {
+    "_skybox": {
       "__id__": 49
     },
-    "postSettings": {
+    "fog": {
       "__id__": 50
+    },
+    "octree": {
+      "__id__": 51
+    },
+    "skin": {
+      "__id__": 52
+    },
+    "lightProbeInfo": {
+      "__id__": 53
+    },
+    "postSettings": {
+      "__id__": 54
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
