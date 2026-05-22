@@ -5,6 +5,14 @@ import { GameUI } from './GameUI';
 
 const { ccclass, property } = _decorator;
 
+@ccclass('GridLayout')
+export class GridLayout {
+    @property
+    gridSize: number = 4;
+    @property
+    cellSize: number = 120;
+}
+
 @ccclass('GridManager')
 export class GridManager extends Component {
     @property(Prefab)
@@ -12,6 +20,12 @@ export class GridManager extends Component {
 
     @property(GameUI)
     gameUI: GameUI = null!;
+
+    @property([GridLayout])
+    layouts: GridLayout[] = [];
+
+    @property
+    defaultCellSize: number = 100;
 
     private currentLevelIndex: number = 0;
     private gridSize: number = 0;
@@ -57,24 +71,31 @@ export class GridManager extends Component {
             return;
         }
 
-        const gridWidth = uiTransform.contentSize.width;
-        const cellSize = gridWidth / this.gridSize;
+        // Get cell size from config or default
+        const config = this.layouts.find(l => l.gridSize === this.gridSize);
+        const S = config ? config.cellSize : this.defaultCellSize;
+        const N = this.gridSize;
 
-        for (let r = 0; r < this.gridSize; r++) {
+        const totalGridWidth = N * S;
+        const totalGridHeight = N * S;
+
+        // Origin for centering the grid in the container
+        const startX = -totalGridWidth / 2 + S / 2;
+        const startY = totalGridHeight / 2 - S / 2;
+
+        for (let r = 0; r < N; r++) {
             this.cells[r] = [];
-            for (let c = 0; c < this.gridSize; c++) {
+            for (let c = 0; c < N; c++) {
                 const cellNode = instantiate(this.cellPrefab);
                 cellNode.parent = this.node;
                 
-                const x = -gridWidth / 2 + (c + 0.5) * cellSize;
-                const y = gridWidth / 2 - (r + 0.5) * cellSize;
+                const x = startX + (c * S);
+                const y = startY - (r * S);
                 cellNode.setPosition(x, y);
                 
                 const cellTransform = cellNode.getComponent(UITransform);
                 if (cellTransform) {
-                    cellTransform.setContentSize(cellSize, cellSize);
-                } else {
-                    console.warn(`Cell prefab at [${r},${c}] is missing UITransform! Add it to the prefab root.`);
+                    cellTransform.setContentSize(S, S);
                 }
 
                 const cell = cellNode.getComponent(Cell);
@@ -132,11 +153,15 @@ export class GridManager extends Component {
 
         const localPos = uiTransform.convertToNodeSpaceAR(new Vec3(screenPos.x, screenPos.y, 0));
         
-        const gridWidth = uiTransform.contentSize.width;
-        const cellSize = gridWidth / this.gridSize;
+        const config = this.layouts.find(l => l.gridSize === this.gridSize);
+        const S = config ? config.cellSize : this.defaultCellSize;
+        const N = this.gridSize;
 
-        const col = Math.floor((localPos.x + gridWidth / 2) / cellSize);
-        const row = Math.floor((gridWidth / 2 - localPos.y) / cellSize);
+        const totalGridWidth = N * S;
+        const totalGridHeight = N * S;
+
+        const col = Math.floor((localPos.x + totalGridWidth / 2) / S);
+        const row = Math.floor((totalGridHeight / 2 - localPos.y) / S);
 
         if (row >= 0 && row < this.gridSize && col >= 0 && col < this.gridSize) {
             return this.cells[row][col];

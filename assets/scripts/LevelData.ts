@@ -13,6 +13,16 @@ export interface LevelData {
 export const LEVELS: LevelData[] = [
     {
         id: 1,
+        gridSize: 4,
+        nodes: [
+            { number: 1, row: 0, col: 0 },
+            { number: 2, row: 3, col: 0 },
+            { number: 3, row: 3, col: 3 },
+            { number: 4, row: 0, col: 3 }
+        ]
+    },
+    {
+        id: 2,
         gridSize: 5,
         nodes: [
             { number: 1, row: 0, col: 0 },
@@ -21,7 +31,7 @@ export const LEVELS: LevelData[] = [
         ]
     },
     {
-        id: 2,
+        id: 3,
         gridSize: 6,
         nodes: [
             { number: 1, row: 0, col: 0 },
@@ -31,7 +41,7 @@ export const LEVELS: LevelData[] = [
         ]
     },
     {
-        id: 3,
+        id: 4,
         gridSize: 7,
         nodes: [
             { "number": 1, "row": 3, "col": 3 },
