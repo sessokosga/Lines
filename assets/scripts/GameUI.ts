@@ -12,9 +12,15 @@ export class GameUI extends Component {
     @property(Node)
     victoryNode: Node = null!;
 
+    @property(Node)
+    gameCompleteNode: Node = null!;
+
     start() {
         if (this.victoryNode) {
             this.victoryNode.active = false;
+        }
+        if (this.gameCompleteNode) {
+            this.gameCompleteNode.active = false;
         }
     }
 
@@ -41,5 +47,21 @@ export class GameUI extends Component {
                 onComplete();
             })
             .start();
+    }
+
+    public showGameComplete() {
+        if (this.gameCompleteNode) {
+            this.gameCompleteNode.active = true;
+            this.gameCompleteNode.setScale(new Vec3(0, 0, 0));
+            tween(this.gameCompleteNode)
+                .to(0.5, { scale: new Vec3(1, 1, 1) }, { easing: 'backOut' })
+                .start();
+        }
+    }
+
+    public hideGameComplete() {
+        if (this.gameCompleteNode) {
+            this.gameCompleteNode.active = false;
+        }
     }
 }
