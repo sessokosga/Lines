@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.SceneAsset",
-    "_name": "",
+    "_name": "line",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -402,7 +402,7 @@
       }
     ],
     "defaultCellSize": 100,
-    "startLevelNumber": 9,
+    "startLevelNumber": 1,
     "_id": "3a/2XKRPVGHL8mMpZwEVVI"
   },
   {
