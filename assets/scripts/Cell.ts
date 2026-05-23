@@ -3,12 +3,10 @@ const { ccclass, property } = _decorator;
 
 export enum PathDirection {
     NONE,
-    HORIZONTAL,
-    VERTICAL,
-    TOP_LEFT,
-    TOP_RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 }
 
 @ccclass('Cell')
@@ -26,17 +24,13 @@ export class Cell extends Component {
     numberLabel: Label = null!;
 
     @property(SpriteFrame)
-    horizontalFrame: SpriteFrame = null!;
+    upFrame: SpriteFrame = null!;
     @property(SpriteFrame)
-    verticalFrame: SpriteFrame = null!;
+    downFrame: SpriteFrame = null!;
     @property(SpriteFrame)
-    topLeftFrame: SpriteFrame = null!;
+    leftFrame: SpriteFrame = null!;
     @property(SpriteFrame)
-    topRightFrame: SpriteFrame = null!;
-    @property(SpriteFrame)
-    bottomLeftFrame: SpriteFrame = null!;
-    @property(SpriteFrame)
-    bottomRightFrame: SpriteFrame = null!;
+    rightFrame: SpriteFrame = null!;
 
     public row: number = 0;
     public col: number = 0;
@@ -64,48 +58,47 @@ export class Cell extends Component {
 
     public setVisited(isHead: boolean = false) {
         this.isVisited = true;
-        this.bgSprite.color = isHead ? this.headColor : this.visitedColor;
-        this.updateVisual();
+        this.updateVisual(isHead);
     }
 
     public setEmpty() {
         this.isVisited = false;
         this.pathDirection = PathDirection.NONE;
-        this.bgSprite.color = this.normalColor;
         this.updateVisual();
     }
 
-    public updateVisual() {
+    public updateVisual(isHead: boolean = false) {
         // Node visual
         if (this.nodeNumber !== -1) {
             this.nodeVisual.active = true;
             this.numberLabel.string = this.nodeNumber.toString();
-            // Optional: special color for node background if needed
+            // Node is green ONLY if it's the current head, otherwise white
+            this.bgSprite.color = (this.isVisited && isHead) ? this.headColor : this.normalColor;
         } else {
             this.nodeVisual.active = false;
+            // Normal cells are green if visited
+            if (this.isVisited) {
+                this.bgSprite.color = isHead ? this.headColor : this.visitedColor;
+            } else {
+                this.bgSprite.color = this.normalColor;
+            }
         }
 
         // Path visual
-        if (this.isVisited && this.pathDirection !== PathDirection.NONE) {
+        if (this.isVisited && this.pathDirection !== PathDirection.NONE && this.nodeNumber === -1) {
             this.pathSprite.node.active = true;
             switch (this.pathDirection) {
-                case PathDirection.HORIZONTAL:
-                    this.pathSprite.spriteFrame = this.horizontalFrame;
+                case PathDirection.UP:
+                    this.pathSprite.spriteFrame = this.upFrame;
                     break;
-                case PathDirection.VERTICAL:
-                    this.pathSprite.spriteFrame = this.verticalFrame;
+                case PathDirection.DOWN:
+                    this.pathSprite.spriteFrame = this.downFrame;
                     break;
-                case PathDirection.TOP_LEFT:
-                    this.pathSprite.spriteFrame = this.topLeftFrame;
+                case PathDirection.LEFT:
+                    this.pathSprite.spriteFrame = this.leftFrame;
                     break;
-                case PathDirection.TOP_RIGHT:
-                    this.pathSprite.spriteFrame = this.topRightFrame;
-                    break;
-                case PathDirection.BOTTOM_LEFT:
-                    this.pathSprite.spriteFrame = this.bottomLeftFrame;
-                    break;
-                case PathDirection.BOTTOM_RIGHT:
-                    this.pathSprite.spriteFrame = this.bottomRightFrame;
+                case PathDirection.RIGHT:
+                    this.pathSprite.spriteFrame = this.rightFrame;
                     break;
             }
         } else {

@@ -125,7 +125,7 @@ Génère ces fichiers TypeScript pour Cocos Creator 3.8:
 
 2. Cell.ts — composant attaché à chaque cellule node:
     - Propriétés: row, col, isVisited, nodeNumber (-1 si pas un nœud),
-      pathDirection (enum: NONE, H, V, TL, TR, BL, BR)
+      pathDirection (enum: NONE, UP, DOWN, LEFT, RIGHT)
     - Méthodes: setVisited(), setEmpty(), updateVisual()
     - Références aux sprites directionnels via @property
 

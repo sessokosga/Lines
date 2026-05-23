@@ -198,6 +198,7 @@ export class GridManager extends Component {
     this.resetPath();
     cell.setVisited(true);
     this.currentPath.push(cell);
+    cell.updateVisual(true);
     this.nextExpectedNode = 2;
     this.updateUI();
   }
@@ -246,7 +247,7 @@ export class GridManager extends Component {
     cell.setVisited(true);
     this.currentPath.push(cell);
     cell.pathDirection = PathDirection.NONE;
-    cell.updateVisual();
+    cell.updateVisual(true);
 
     lastCell.updateVisual();
     this.updateUI();
@@ -266,7 +267,7 @@ export class GridManager extends Component {
     if (newHead) {
       newHead.setVisited(true);
       newHead.pathDirection = PathDirection.NONE;
-      newHead.updateVisual();
+      newHead.updateVisual(true);
     }
 
     this.updateUI();
@@ -277,31 +278,14 @@ export class GridManager extends Component {
     prev: Cell | undefined,
     next: Cell,
   ) {
-    if (!prev) {
-      if (next.row < middle.row || next.row > middle.row)
-        middle.pathDirection = PathDirection.VERTICAL;
-      else middle.pathDirection = PathDirection.HORIZONTAL;
-    } else {
-      const fromR = prev.row - middle.row;
-      const fromC = prev.col - middle.col;
-      const toR = next.row - middle.row;
-      const toC = next.col - middle.col;
+    const dr = next.row - middle.row;
+    const dc = next.col - middle.col;
 
-      if (fromR !== 0 && toR !== 0)
-        middle.pathDirection = PathDirection.VERTICAL;
-      else if (fromC !== 0 && toC !== 0)
-        middle.pathDirection = PathDirection.HORIZONTAL;
-      else {
-        if ((fromR === -1 && toC === 1) || (fromC === 1 && toR === -1))
-          middle.pathDirection = PathDirection.TOP_RIGHT;
-        else if ((fromR === -1 && toC === -1) || (fromC === -1 && toR === -1))
-          middle.pathDirection = PathDirection.TOP_LEFT;
-        else if ((fromR === 1 && toC === 1) || (fromC === 1 && toR === 1))
-          middle.pathDirection = PathDirection.BOTTOM_RIGHT;
-        else if ((fromR === 1 && toC === -1) || (fromC === -1 && toR === 1))
-          middle.pathDirection = PathDirection.BOTTOM_LEFT;
-      }
-    }
+    if (dr === -1) middle.pathDirection = PathDirection.UP;
+    else if (dr === 1) middle.pathDirection = PathDirection.DOWN;
+    else if (dc === -1) middle.pathDirection = PathDirection.LEFT;
+    else if (dc === 1) middle.pathDirection = PathDirection.RIGHT;
+
     middle.updateVisual();
   }
 
