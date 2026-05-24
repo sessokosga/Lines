@@ -47,7 +47,7 @@ export class Cell extends Component {
   public pathDirection: PathDirection = PathDirection.NONE;
 
   private readonly normalColor = new Color(255, 255, 255, 255);
-  private readonly visitedColor = new Color(26, 164, 218, 150 / 2); // Light green with opacity
+  private readonly visitedColor = new Color(26, 164, 218, 255 / 2); // Light green with opacity
   private readonly headColor = new Color(26, 164, 218, 255 / 2); // Brighter green for head
   private readonly nodeColor = new Color(0, 100, 0, 255); // Dark green
 
@@ -81,8 +81,7 @@ export class Cell extends Component {
       this.nodeVisual.active = true;
       this.numberLabel.string = this.nodeNumber.toString();
       // Node is green ONLY if it's the current head, otherwise white
-      this.bgSprite.color =
-        this.isVisited && isHead ? this.headColor : this.normalColor;
+      this.bgSprite.color = this.isVisited ? this.headColor : this.normalColor;
     } else {
       this.nodeVisual.active = false;
       // Normal cells are green if visited
