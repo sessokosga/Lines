@@ -13,6 +13,7 @@ import {
 import { Cell, PathDirection } from "./Cell";
 import { LevelData, LEVELS } from "./LevelData";
 import { GameUI } from "./GameUI";
+import { AudioManager } from "./AudioManager";
 
 const { ccclass, property } = _decorator;
 
@@ -227,11 +228,24 @@ export class GridManager extends Component {
             this.extendPath(cell);
             this.nextExpectedNode++;
           } else {
+            if (AudioManager.instance) {
+              AudioManager.instance.playError();
+            }
             this.isDragging = false;
           }
         } else {
           this.extendPath(cell);
         }
+      } else {
+        // Already visited cell (other than the one we might be retracting to)
+        if (AudioManager.instance && cell !== this.currentPath[this.currentPath.length - 2]) {
+           // AudioManager.instance.playError(); // Optional: can be annoying if played too often
+        }
+      }
+    } else {
+      // Not adjacent
+      if (AudioManager.instance && cell !== lastCell) {
+        // AudioManager.instance.playError();
       }
     }
   }
@@ -251,6 +265,10 @@ export class GridManager extends Component {
 
     lastCell.updateVisual();
     this.updateUI();
+
+    if (cell.nodeNumber !== -1 && AudioManager.instance) {
+      AudioManager.instance.playSuccess();
+    }
   }
 
   private retractPath() {
@@ -332,6 +350,10 @@ export class GridManager extends Component {
       const allCellsVisited = this.currentPath.length === this.gridSize * this.gridSize;
 
       if (allNodesTouched && allCellsVisited && this.gameUI) {
+          if (AudioManager.instance) {
+              AudioManager.instance.playVictory();
+          }
+          
           if (this.currentLevelIndex < LEVELS.length - 1) {
               this.gameUI.showVictory(() => {
                   this.loadLevel(this.currentLevelIndex + 1);

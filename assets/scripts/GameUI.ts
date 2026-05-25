@@ -1,4 +1,5 @@
 import { _decorator, Component, Label, Node, tween, Vec3 } from 'cc';
+import { AudioManager } from './AudioManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameUI')
@@ -21,6 +22,14 @@ export class GameUI extends Component {
         }
         if (this.gameCompleteNode) {
             this.gameCompleteNode.active = false;
+        }
+    }
+
+    public toggleMute() {
+        if (AudioManager.instance) {
+            const isMuted = AudioManager.instance.toggleMute();
+            // Optionnel: tu pourras ici changer l'icône du bouton mute si tu en as une
+            console.log("Mute state:", isMuted);
         }
     }
 
