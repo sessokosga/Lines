@@ -136,9 +136,18 @@ export class GridManager extends Component {
     const touchPos = event.getUILocation();
     const cell = this.getCellAtPos(touchPos);
 
-    if (cell && cell.nodeNumber === 1) {
+    if (!cell) return;
+
+    const isStartNode = cell.nodeNumber === 1;
+    const isCurrentHead = this.currentPath.length > 0 && cell === this.currentPath[this.currentPath.length - 1];
+
+    if (isStartNode) {
       this.isDragging = true;
       this.startPath(cell);
+      this.lastTouchPos.set(touchPos.x, touchPos.y);
+    } else if (isCurrentHead) {
+      // Reprendre depuis la tête actuelle
+      this.isDragging = true;
       this.lastTouchPos.set(touchPos.x, touchPos.y);
     }
   }
