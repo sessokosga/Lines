@@ -53,6 +53,7 @@ export class GridManager extends Component {
   private totalNodes: number = 0;
   private isDragging: boolean = false;
   private lastTouchPos: Vec2 = new Vec2();
+  private lastInvalidCell: Cell | null = null;
 
   start() {
     this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -71,6 +72,7 @@ export class GridManager extends Component {
     this.nextExpectedNode = 1;
     this.currentPath = [];
     this.isDragging = false;
+    this.lastInvalidCell = null;
 
     this.generateGrid(levelData);
     if (this.gameUI) {
@@ -217,16 +219,29 @@ export class GridManager extends Component {
     const lastCell = this.currentPath[this.currentPath.length - 1];
     if (cell === lastCell) return;
 
-    // Check for retract
+    // Check for retract (always allowed, even if we were in an error state)
     if (
       this.currentPath.length > 1 &&
       cell === this.currentPath[this.currentPath.length - 2]
     ) {
+      if (this.lastInvalidCell) {
+        this.lastInvalidCell.updateVisual();
+        this.lastInvalidCell = null;
+      }
       this.retractPath();
       return;
     }
 
-    // Check if adjacent
+    // If we are on an invalid cell and haven't retracted, don't do anything else
+    if (this.lastInvalidCell && cell === this.lastInvalidCell) return;
+
+    // If we move to a different cell while having an error, reset the previous error visual
+    if (this.lastInvalidCell && cell !== this.lastInvalidCell) {
+      this.lastInvalidCell.updateVisual();
+      this.lastInvalidCell = null;
+    }
+
+    // Check if adjacent to the current head
     const dr = Math.abs(cell.row - lastCell.row);
     const dc = Math.abs(cell.col - lastCell.col);
     if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
@@ -237,24 +252,23 @@ export class GridManager extends Component {
             this.extendPath(cell);
             this.nextExpectedNode++;
           } else {
+            // Wrong node number
             if (AudioManager.instance) {
               AudioManager.instance.playError();
             }
-            this.isDragging = false;
+            this.lastInvalidCell = cell;
+            cell.showError();
           }
         } else {
           this.extendPath(cell);
         }
       } else {
-        // Already visited cell (other than the one we might be retracting to)
-        if (AudioManager.instance && cell !== this.currentPath[this.currentPath.length - 2]) {
-           // AudioManager.instance.playError(); // Optional: can be annoying if played too often
+        // Cell already visited (and not the retract one)
+        if (AudioManager.instance) {
+           AudioManager.instance.playError();
         }
-      }
-    } else {
-      // Not adjacent
-      if (AudioManager.instance && cell !== lastCell) {
-        // AudioManager.instance.playError();
+        this.lastInvalidCell = cell;
+        cell.showError();
       }
     }
   }

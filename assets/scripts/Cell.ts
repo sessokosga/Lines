@@ -47,9 +47,10 @@ export class Cell extends Component {
   public pathDirection: PathDirection = PathDirection.NONE;
 
   private readonly normalColor = new Color(255, 255, 255, 255);
-  private readonly visitedColor = new Color(26, 164, 218, 255 / 2); // Light green with opacity
-  private readonly headColor = new Color(26, 164, 218, 255 / 2); // Brighter green for head
+  private readonly visitedColor = new Color(26, 164, 218, 255 / 2); // Light blue with opacity
+  private readonly headColor = new Color(26, 164, 218, 255 / 2); // Brighter blue for head
   private readonly nodeColor = new Color(0, 100, 0, 255); // Dark green
+  private readonly errorColor = new Color(218, 80, 26, 255); // Harmonious Coral/Red with same opacity
 
   start() {
     this.updateVisual();
@@ -73,6 +74,10 @@ export class Cell extends Component {
     this.isVisited = false;
     this.pathDirection = PathDirection.NONE;
     this.updateVisual();
+  }
+
+  public showError() {
+    this.bgSprite.color = this.errorColor;
   }
 
   public updateVisual(isHead: boolean = false) {
